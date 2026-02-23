@@ -70,7 +70,7 @@ namespace iMS
 
 namespace iMS
 {
-  %rename(__eq__) DDSScriptRegister::operator==;
+  %rename(Equals) DDSScriptRegister::operator==;
   class DDSScriptRegister
   {
   public:

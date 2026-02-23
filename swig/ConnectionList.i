@@ -27,29 +27,6 @@ SWIG_STD_VECTOR_ENHANCED(iMS::IMSSystem)
 
 namespace iMS {
 
-%rename(_Scan) ConnectionList::Scan();
-%rename(_ScanInterface) ConnectionList::Scan(const std::string&, const std::vector<std::string>& = {});
-
-%ignore ConnectionList::_Scan;
-%ignore ConnectionList::_ScanInterface;
-
-%typemap(cscode) ConnectionList %{
-    public System.Collections.Generic.IList<IMSSystem> Scan()
-    {
-        return this._Scan();
-    }
-
-    public IMSSystem Scan(string interfaceName)
-    {
-        return this._ScanInterface(interfaceName, new System.Collections.Generic.List<string>());
-    }
-
-    public IMSSystem Scan(string interfaceName, System.Collections.Generic.IList<string> addressHints)
-    {
-        return this._ScanInterface(interfaceName, addressHints);
-    }
-%} 
-
   class ConnectionList
   {
   public:

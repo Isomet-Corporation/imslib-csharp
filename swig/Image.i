@@ -157,7 +157,7 @@
 namespace iMS {
 
   %copyctor ImagePoint;
-  %rename(__eq__) ImagePoint::operator==;
+  %rename(Equals) ImagePoint::operator==;
   %typemap(csinterfaces) ImagePoint "System.IDisposable, System.ComponentModel.INotifyPropertyChanged";
   class ImagePoint
   {
@@ -274,11 +274,11 @@ namespace iMS {
 
 namespace iMS {
   %ignore SequenceEntry::operator=;
-  %rename(__eq__) SequenceEntry::operator==;
+  %rename(Equals) SequenceEntry::operator==;
   struct SequenceEntry {
     SequenceEntry();
     SequenceEntry(const std::array<std::uint8_t, 16>& uuid, const int rpts = 0);
-    //  virtual ~SequenceEntry() = 0;
+    virtual ~SequenceEntry() = 0;
     SequenceEntry(const SequenceEntry&);
     SequenceEntry& operator =(const SequenceEntry&);
     virtual bool operator==(SequenceEntry const& rhs) const = 0;
@@ -302,7 +302,7 @@ namespace iMS {
 
 namespace iMS {
   %ignore ImageSequenceEntry::operator=;
-  %rename(__eq__) ImageSequenceEntry::operator==;
+  %rename(Equals) ImageSequenceEntry::operator==;
   struct ImageSequenceEntry : iMS::SequenceEntry
   {
     ImageSequenceEntry();

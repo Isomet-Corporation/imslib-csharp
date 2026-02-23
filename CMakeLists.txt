@@ -10,33 +10,33 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # --- Conan integration ------------------------------------------------------
-set(CONAN_GENERATORS_DIR "${CMAKE_BINARY_DIR}/conan")
-file(MAKE_DIRECTORY ${CONAN_GENERATORS_DIR})
+# set(CONAN_GENERATORS_DIR "${CMAKE_BINARY_DIR}/conan")
+# file(MAKE_DIRECTORY ${CONAN_GENERATORS_DIR})
 
 if (MSVC)
-   set(CONAN_TOOLCHAIN_FILE "${CONAN_GENERATORS_DIR}/build/generators/conan_toolchain.cmake")
+   set(CONAN_TOOLCHAIN_FILE "${CMAKE_BINARY_DIR}/build/generators/conan_toolchain.cmake")
 else()
-   set(CONAN_TOOLCHAIN_FILE "${CONAN_GENERATORS_DIR}/build/Release/generators/conan_toolchain.cmake")
+   set(CONAN_TOOLCHAIN_FILE "${CMAKE_BINARY_DIR}/build/Release/generators/conan_toolchain.cmake")
 endif()
 
-if(NOT EXISTS "${CONAN_TOOLCHAIN_FILE}")
-    message(STATUS "[CMake] Running Conan install")
-    execute_process(
-        COMMAND conan install ${CMAKE_SOURCE_DIR}
-                --profile default
-                -s build_type=Release
-                -s compiler.cppstd=17
-                --build=missing
-                -of ${CONAN_GENERATORS_DIR}
-        RESULT_VARIABLE result
-        OUTPUT_VARIABLE out
-        ERROR_VARIABLE err
-    )
-    message(STATUS "Conan output:\n${out}\n${err}")
-    if(NOT result EQUAL 0)
-        message(FATAL_ERROR "Conan install failed")
-    endif()
-endif()
+# if(NOT EXISTS "${CONAN_TOOLCHAIN_FILE}")
+#     message(STATUS "[CMake] Running Conan install")
+#     execute_process(
+#         COMMAND conan install ${CMAKE_SOURCE_DIR}
+#                 --profile default
+#                 -s build_type=Release
+#                 -s compiler.cppstd=17
+#                 --build=missing
+#                 -of ${CONAN_GENERATORS_DIR}
+#         RESULT_VARIABLE result
+#         OUTPUT_VARIABLE out
+#         ERROR_VARIABLE err
+#     )
+#     message(STATUS "Conan output:\n${out}\n${err}")
+#     if(NOT result EQUAL 0)
+#         message(FATAL_ERROR "Conan install failed")
+#     endif()
+# endif()
 
 message(STATUS "Conan toolchain at ${CONAN_TOOLCHAIN_FILE}")
 include(${CONAN_TOOLCHAIN_FILE})
@@ -52,7 +52,7 @@ endif()
 
 include(${SWIG_USE_FILE})
 
-set(SWIG_MODULE_NAME imsNET)
+set(SWIG_MODULE_NAME iMSNETlib)
 
 # The underlying C++ Library
 set(IMS_LIB_SUBMODULE ext/ims-lib)
@@ -78,13 +78,13 @@ find_package(Boost REQUIRED)
 
 # SWIG options:
 #  -c++        : C++ mode
-#  -threads    : Python GIL-safe callback support
 #  -directors  : Support SWIG Callbacks
 #  -Wall       : Warnings
 set(CMAKE_SWIG_FLAGS "-c++" "-directors" "-Wall")
+#set(CMAKE_SWIG_FLAGS "-c++" "-Wall")
 
 # Define the SWIG module
-set(SWIG_INTERFACE swig/imsNET.i)
+set(SWIG_INTERFACE swig/iMSNET.i)
 
 set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_SOURCE_DIR}/dotnet)
 

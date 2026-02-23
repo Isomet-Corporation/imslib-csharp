@@ -53,9 +53,12 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 
-ext/
 dotnet/
 build/
 CMakeUserPresets.json
 swig/iMSNET_wrap.cxx
 swig/iMSNET_wrap.h
+build32/
+build64/
+resources
+dist

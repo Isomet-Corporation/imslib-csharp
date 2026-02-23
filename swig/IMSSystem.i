@@ -140,22 +140,18 @@ namespace iMS {
   };
 }
 
-%ignore iMS::IConnectionSettings; // abstract and not needed in C#
+%ignore iMS::IConnectionSettings::IConnectionSettings;
+%ignore iMS::IConnectionSettings::~IConnectionSettings;
 
 namespace iMS {
 
   class IConnectionSettings
   {
   public:
+    virtual IConnectionSettings() = 0;
   	virtual ~IConnectionSettings() {}
-//    virtual const std::string& Ident() const = 0;
-//    virtual void ProcessData(const std::vector<std::uint8_t>& data) = 0;
-//    virtual const std::vector<std::uint8_t>& ProcessData() const = 0;
   };
 }
-
-//%ignore iMS::CS_ETH::ProcessData(const std::vector<std::uint8_t>& data);
-//%ignore iMS::CS_ETH::ProcessData() const;
 
 %attribute(iMS::CS_ETH, bool, dhcp, UseDHCP, UseDHCP);
 %attributestring(iMS::CS_ETH, std::string, addr, Address, Address);
@@ -183,13 +179,8 @@ namespace iMS {
        void Gateway(const std::string& gw);
        std::string Gateway() const;
        const std::string& Ident() const;
-//       void ProcessData(const std::vector<std::uint8_t>& data);
-//       const std::vector<std::uint8_t>& ProcessData() const;
   };
 }
-
-//%ignore iMS::CS_RS422::ProcessData(const std::vector<std::uint8_t>& data);
-//%ignore iMS::CS_RS422::ProcessData() const;
 
 %attribute(iMS::CS_RS422, unsigned int, baud, BaudRate, BaudRate);
 %attribute(iMS::CS_RS422, iMS::CS_RS422::ParitySetting, parity, Parity, Parity);
@@ -235,29 +226,8 @@ namespace iMS {
   };
 }
 
-%typemap(cstype) const std::string& settings "object"
-%typemap(imtype) const std::string& settings "System.IntPtr"
-
-%typemap(csin) const std::string& settings
-{
-    string name;
-
-    if ($csinput is string)
-        name = (string)$csinput;
-    else if ($csinput != null)
-        name = $csinput.GetType().Name;
-    else
-        throw new System.ArgumentException("Expected string or object");
-
-    System.IntPtr tmp = imslibPINVOKE.new_std_string(name);
-    $imcall = tmp;
-}
-
-%typemap(freearg) const std::string& settings {
-    delete $1;
-}
-
 namespace iMS {
+  %rename(Equals) IMSSystem::operator==;
   class IMSSystem
   {
   public:
@@ -279,22 +249,26 @@ namespace iMS {
   };
 
   %extend IMSSystem {
-    iMS::IConnectionSettings* RetrieveSettings(const std::string& settings) {
-    if (settings == "CS_RS422") {
-        static CS_RS422 obj;  // static is required to persist memory usage across calls and avoid double deletes, but it is not thread-safe
-        if (!$self->RetrieveSettings(obj)) {
+
+        // Generic wrapper for C# to create and populate a concrete type
+    CS_RS422* RetrieveSettings_RS422() {
+        CS_RS422* obj = new CS_RS422();
+        bool ok = $self->RetrieveSettings(*obj);
+        if (!ok) {
+            delete obj;
             return nullptr;
         }
-        return new CS_RS422(obj);
+        return obj;
     }
-    else if (settings == "CS_ETH") {
-        static CS_ETH obj;
-        if (!$self->RetrieveSettings(obj)) {
+
+    CS_ETH* RetrieveSettings_ETH() {
+        CS_ETH* obj = new CS_ETH();
+        bool ok = $self->RetrieveSettings(*obj);
+        if (!ok) {
+            delete obj;
             return nullptr;
         }
-        return new CS_ETH(obj);
-    }
-    return nullptr;
+        return obj;
     }
   }
 }

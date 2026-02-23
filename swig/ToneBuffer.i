@@ -141,7 +141,7 @@ namespace iMS {
     DOWNLOAD_ERROR
   };
   
-  %rename(__eq__) TBEntry::operator==;
+  %rename(Equals) TBEntry::operator==;
   %typemap(csinterfaces) TBEntry "System.IDisposable, System.ComponentModel.INotifyPropertyChanged";
   class TBEntry
   {
@@ -180,7 +180,7 @@ namespace iMS {
 
 namespace iMS {
 
-  %rename(__eq__) ToneBuffer::operator==;
+  %rename(Equals) ToneBuffer::operator==;
   %ignore ToneBuffer::operator=;
   %typemap(csinterfaces) ToneBuffer "System.IDisposable, System.Collections.IEnumerable";
   class ToneBuffer {
@@ -406,7 +406,7 @@ namespace iMS {
 namespace iMS {
 
   %ignore ToneSequenceEntry::operator=;
-  %rename(__eq__) ToneSequenceEntry::operator==;
+  %rename(Equals) ToneSequenceEntry::operator==;
   struct ToneSequenceEntry : iMS::SequenceEntry
   {
     ToneSequenceEntry();

@@ -2,7 +2,7 @@
 
 namespace iMS {
 
-  %rename(__eq__) ListBase::operator==;
+  %rename(Equals) ListBase::operator==;
   %rename(__getitem__) ListBase::operator[] const;
   %rename(__setitem__) ListBase::operator[];
 template <typename CTYPE>
@@ -385,7 +385,7 @@ template <typename CTYPE>
 %attributestring(iMS::ListBase< std::string >, std::string, ModifiedTimeFormat, ModifiedTimeFormat);
 
 namespace iMS {
-  %rename(__eq__) DequeBase::operator==;
+  %rename(Equals) DequeBase::operator==;
   //  %rename(__item__) DequeBase::operator[];
   %ignore DequeBase::operator[];
 template <typename CTYPE>

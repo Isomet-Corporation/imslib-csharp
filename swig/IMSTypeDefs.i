@@ -5,11 +5,11 @@
   }
 %}
 
-%attribute_custom(iMS::Frequency, double, value, GetValue, SetValue, (*self_), (*self_)=val_);
-%attribute_custom(iMS::kHz, double, value, GetValue, SetValue, (*self_), (*self_)=val_);
-%attribute_custom(iMS::MHz, double, value, GetValue, SetValue, (*self_), (*self_)=val_);
-%attribute_custom(iMS::Percent, double, value, GetValue, SetValue, (*self_), (*self_)=val_);
-%attribute_custom(iMS::Degrees, double, value, GetValue, SetValue, (*self_), (*self_)=val_);
+// %attribute_custom(iMS::Frequency, double, value, GetValue, SetValue, (*self_), (*self_)=val_);
+// %attribute_custom(iMS::kHz, double, value, GetValue, SetValue, (*self_), (*self_)=val_);
+// %attribute_custom(iMS::MHz, double, value, GetValue, SetValue, (*self_), (*self_)=val_);
+//%attribute_custom(iMS::Percent, double, value, GetValue, SetValue, (*self_), (*self_)=val_);
+//%attribute_custom(iMS::Degrees, double, value, GetValue, SetValue, (*self_), (*self_)=val_);
 %attribute_custom(iMS::RFChannel, int, value, GetValue, SetValue, (*self_), (*self_)=(val_ = (val_ == RFChannel::all) ? val_ : (val_ < RFChannel::min) ? RFChannel::min : (val_ > RFChannel::max) ? RFChannel::max : val_));
 
 namespace iMS {
@@ -149,8 +149,27 @@ namespace iMS {
       {
 	return this.Value.ToString();
       }
+    public virtual double Value
+      {
+	get {
+	  return getvalue();
+	}
+	set {
+	  setvalue(value);
+	  this.NotifyPropertyChanged("Value");
+	}
+      }
+
     %}
   public:
+    %extend {
+      double getvalue() {
+	return *self;
+      }
+      void setvalue(double val) {
+	*self = val;
+      }
+    }
     Percent();
     Percent(double arg);
     Percent& operator = (double arg);
@@ -177,14 +196,33 @@ namespace iMS {
       {
 	return this.Value.ToString();
       }
+    public virtual double Value
+      {
+	get {
+	  return getvalue();
+	}
+	set {
+	  setvalue(value);
+	  this.NotifyPropertyChanged("Value");
+	}
+      }
+
     %}
   public:
+    %extend {
+      double getvalue() {
+	return *self;
+      }
+      void setvalue(double val) {
+	*self = val;
+      }
+    }
     Degrees(double arg);
     Degrees& operator = (double arg);
     operator double() const;
   };
 
-  %rename(__eq__) FAP::operator==;
+  %rename(Equals) FAP::operator==;
   %rename(__ne__) FAP::operator!=;
   struct FAP
   {
@@ -264,11 +302,20 @@ namespace iMS {
 
 %attributeref(iMS::SweepTone, iMS::FAP&, start, start);
 %attributeref(iMS::SweepTone, iMS::FAP&, end, end);
-%attributeval(iMS::SweepTone, %arg(std::chrono::duration<double, std::ratio<1> >), UpRamp, up_ramp);
-%attributeval(iMS::SweepTone, %arg(std::chrono::duration<double, std::ratio<1> >), DownRamp, down_ramp);
+%attributeref(iMS::SweepTone, std::chrono::duration<double>&, UpRamp, up_ramp);
+%attributeref(iMS::SweepTone, std::chrono::duration<double>&, DownRamp, down_ramp);
 %attributeref(iMS::SweepTone, int, n_steps, n_steps);
 %attributeref(iMS::SweepTone, iMS::ENHANCED_TONE_MODE, mode, mode);
 %attributeref(iMS::SweepTone, iMS::DAC_CURRENT_REFERENCE, scaling, scaling);
+
+// %typemap(cscode) SweepTone %{
+// public SweepTone(FAP start, FAP end, System.TimeSpan up, System.TimeSpan down, int steps, ENHANCED_TONE_MODE mode, DAC_CURRENT_REFERENCE scaling)
+//     : this(SweepTone.SwigConstructSweepTone(start, end, up, down, steps, mode, scaling), true)
+// {
+//     if (iMSNETlibPINVOKE.SWIGPendingException.Pending)
+//         throw iMSNETlibPINVOKE.SWIGPendingException.Retrieve();
+// }
+// %}
 
 namespace iMS {
 
@@ -276,15 +323,17 @@ namespace iMS {
   {
     FAP& start(); 
     FAP& end();
-    std::chrono::duration<double, std::ratio<1> > up_ramp();
-    std::chrono::duration<double, std::ratio<1> > down_ramp();
+    std::chrono::duration<double>& up_ramp();
+    const std::chrono::duration<double>& up_ramp();
+    std::chrono::duration<double>& down_ramp();
+    const std::chrono::duration<double>& down_ramp();
     int& n_steps();
     ENHANCED_TONE_MODE& mode();
     DAC_CURRENT_REFERENCE& scaling();
 
     SweepTone();
     SweepTone(FAP tone);
-    SweepTone(FAP start, FAP end, std::chrono::duration<double>& up, std::chrono::duration<double>& down, int steps, ENHANCED_TONE_MODE mode, DAC_CURRENT_REFERENCE scaling);
+    SweepTone(FAP start, FAP end, const std::chrono::duration<double>& up, const std::chrono::duration<double>& down, int steps, ENHANCED_TONE_MODE mode, DAC_CURRENT_REFERENCE scaling);
     SweepTone(const SweepTone &);
     //    SweepTone &operator =(const SweepTone &);
   };
