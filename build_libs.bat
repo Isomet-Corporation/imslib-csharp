@@ -58,12 +58,13 @@ set CS_PROJECT_DIR=dotnet
 set IMSC_FILE=..\%CS_PROJECT_DIR%\*.cs
 set EDL_FILE=..\src\EmbeddedDLL.cs
 set ASSY_FILE=..\src\AssemblyInfo.cs
+set BASENAME=iMSNETlib
 
 if "%BUILD_TYPE%"=="Debug" (
-    set CLIBNAME=iMSNETlibd
-    set CSLIBNAME=iMSNETd    
+    set CLIBNAME=%BASENAME%d
+    set CSLIBNAME=iMSNETd
 ) else (
-    set CLIBNAME=iMSNETlib
+    set CLIBNAME=%BASENAME%
     set CSLIBNAME=iMSNET
 )
 

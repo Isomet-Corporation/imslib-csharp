@@ -22,6 +22,12 @@ namespace iMS
                 ? "iMSNETlib64"
                 : "iMSNETlib32";
 
+#if DEBUG
+            string nativeDLL = "iMSNETlibd.dll";
+#else
+            string nativeDLL = "iMSNETlib.dll";
+#endif
+
             var asm = Assembly.GetExecutingAssembly();
 
             using (var stream = asm.GetManifestResourceStream(resource))
@@ -36,13 +42,14 @@ namespace iMS
 
                 Directory.CreateDirectory(dir);
 
-                string dllPath = Path.Combine(dir, "iMSNETlib.dll");
+                string dllPath = Path.Combine(dir, nativeDLL);
 
-                if (!File.Exists(dllPath))
+                if (File.Exists(dllPath))
                 {
-                    using (var fs = new FileStream(dllPath, FileMode.Create, FileAccess.Write))
-                        stream.CopyTo(fs);
+                    File.Delete(dllPath);
                 }
+                using (var fs = new FileStream(dllPath, FileMode.Create, FileAccess.Write))
+                    stream.CopyTo(fs);
 
                 IntPtr handle = LoadLibrary(dllPath);
 
@@ -57,7 +64,8 @@ namespace iMS
         public static void Init()
         {
             // triggers static constructor
-            _ = typeof(NativeLoader);
+            var type = typeof(NativeLoader);
+            RuntimeHelpers.RunClassConstructor(type.TypeHandle);
         }
     }
 
