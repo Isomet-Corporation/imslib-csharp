@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 REM =======================================================
 REM Input Arguments
 REM =======================================================
-set "options=-c:Release -s:False -o:build"
+set "options=-c:Release -s:False -o:dist"
 :: Set the default option values
 for %%O in (%options%) do for /f "tokens=1,* delims=:" %%A in ("%%O") do set "%%A=%%~B"
 :loop
