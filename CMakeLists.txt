@@ -74,6 +74,7 @@ swig_add_library(${SWIG_MODULE_NAME}
     LANGUAGE csharp
     SOURCES ${SWIG_INTERFACE}
 ) 
+set_property(TARGET ${SWIG_MODULE_NAME} PROPERTY SWIG_COMPILE_OPTIONS -namespace iMS)
 
 # Set source and include directories
 target_include_directories(${SWIG_MODULE_NAME} PRIVATE
