@@ -1,0 +1,23 @@
+{
+  "Name": "imslib-csharp",
+  "DependsOn": [],
+  "OutputDir": "dist",
+  "Tasks": [
+    {
+      "Name": "Release",
+      "Script": "build_libs.bat",
+      "Args": {
+        "-c": "Release",
+        "-o": "dist"
+      }
+    },
+    {
+      "Name": "Debug",
+      "Script": "build_libs.bat",
+      "Args": {
+        "-c": "Debug",
+        "-o": "dist"
+      }
+    }
+  ]
+}
