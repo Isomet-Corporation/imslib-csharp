@@ -85,7 +85,14 @@ target_include_directories(${SWIG_MODULE_NAME} PRIVATE
 
 # Add iMS Library directly to this module
 set(IMS_TARGET_NAME ${SWIG_MODULE_NAME})
+set(IMSLIB_SUPPRESS_LIBRARY_BUILD ON)
 add_subdirectory(${IMS_LIB_SUBMODULE})
+
+# Needed for static build.  This is fragile - there must be a better way! TODO
+set (IMSHW_RESOURCE_FILE "")
+if (WIN32 AND NOT ${IMSLIB_BUILD_SHARED}) 
+    set (IMSHW_RESOURCE_FILE "${CMAKE_BINARY_DIR}/${IMS_LIB_SUBMODULE}/${IMS_TARGET_NAME}.dir/${CMAKE_BUILD_TYPE}/imshw.res")
+endif()
 
 if(MSVC)
     add_compile_options(/wd8029)  # Disable warning MSB8029 about building in Temporary Folder
