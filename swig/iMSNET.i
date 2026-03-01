@@ -35,8 +35,8 @@
 %include "std_vector.i"
 //%include "std_deque.i"
 %include "std_map.i"
-//%include "uuid_std_array.i"
-%include <std_array.i>
+%include "uuid_std_array.i"
+//%include <std_array.i>
 //%include "windows.i"
 %include "attribute.i"
 %include "typemaps.i"
@@ -47,8 +47,8 @@
 SWIG_STD_VECTOR_ENHANCED(uint8_t)
 %template(ByteVector) std::vector<uint8_t>;
 %template(StringVector) std::vector<std::string>;
-%template(UUID) std::array<uint8_t, 16>;
-%template(VelGain) std::array<int16_t, 2>;
+// %template(UUID) std::array<uint8_t, 16>;
+// %template(VelGain) std::array<int16_t, 2>;
 
 %shared_ptr(iMS::IMSSystem);
 
