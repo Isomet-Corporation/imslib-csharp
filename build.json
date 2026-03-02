@@ -6,18 +6,12 @@
     {
       "Name": "Release",
       "Script": "build_libs.bat",
-      "Args": {
-        "-c": "Release",
-        "-o": "dist"
-      }
+      "Args": ["-c", "Release", "-o", "dist"]
     },
     {
       "Name": "Debug",
       "Script": "build_libs.bat",
-      "Args": {
-        "-c": "Debug",
-        "-o": "dist"
-      }
+      "Args": ["-c", "Debug", "-o", "dist"]
     }
   ]
 }
