@@ -2,6 +2,8 @@
   "Name": "imslib-csharp",
   "DependsOn": [],
   "OutputDir": "dist",
+  "ExportDir": "lib/dotnet",
+  "SignFiles": ["*.dll"],
   "Tasks": [
     {
       "Name": "Release",
